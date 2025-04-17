@@ -24,7 +24,13 @@ public class Exercises {
         if there's no match for a date, return null
      */
     public String findDate(String string) {
-        // todo
+        String regex = "\\b([0,1,2]\\d|3[0,1]|\\d{4})\\/(\\d{2})\\/(\\d{2,4})\\b|\\b(\\d{4})-(\\d{2})-(\\d{2})\\b";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(string);
+
+        if (matcher.find()) {
+            return matcher.group();
+        }
         return null;
     }
 
@@ -39,8 +45,17 @@ public class Exercises {
         - has no white-space in it
      */
     public int findValidPasswords(String string) {
-        // todo
-        return -1;
+        Pattern pattern = Pattern.compile("(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}");
+        String[] potentialPasswords = string.split("\\s");
+
+        int count = 0;
+        for (String password : potentialPasswords) {
+            Matcher matcher = pattern.matcher(password);
+            while (matcher.find()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /*
@@ -51,8 +66,29 @@ public class Exercises {
      */
     public List<String> findPalindromes(String string) {
         List<String> list = new ArrayList<>();
-        // todo
+
+        String[] words = string.split("\\s+");
+        for (String word : words) {
+            String cleaned = word.replaceAll("^[^a-zA-Z]+|[^a-zA-Z]+$", "");
+            if (cleaned.length() >= 3 && isPalindrome(cleaned)) {
+                list.add(cleaned);
+            }
+        }
         return list;
+    }
+
+    private boolean isPalindrome(String text) {
+        String lower = text.toLowerCase();
+        int left = 0;
+        int right = lower.length() - 1;
+        while (left < right) {
+            if (lower.charAt(left) != lower.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
     public static void main(String[] args) {
